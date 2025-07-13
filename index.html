@@ -7,75 +7,159 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            overflow-x: hidden;
+            box-sizing: border-box;
         }
-        .game-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             overflow: hidden;
         }
-        .game-object {
-            position: absolute;
-            transition: all 0.1s ease-out;
+
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
         }
-        .tooth {
-            width: 40px;
-            height: 40px;
-            background-image: url('./src/tooth.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: 10;
-        }
-        .bacteria {
-            width: 30px;
-            height: 30px;
-            background-image: url('./src/bacteria.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: 5;
-        }
-        .power-up {
-            width: 35px;
-            height: 35px;
-            background-image: url('./src/powerup.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: 7;
-        }
-        .game-bg {
+
+        .menu-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
-        .floating-animation {
-            animation: float 3s ease-in-out infinite;
+
+        .menu-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+        .shield-icon {
+            font-size: 4rem;
+            color: #4f46e5;
+            margin-bottom: 1rem;
         }
-        .pulse-animation {
-            animation: pulse 2s ease-in-out infinite;
+
+        .game-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
         }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+
+        .game-subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
         }
-        .modal-overlay {
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+
+        .difficulty-options {
+            margin-bottom: 2rem;
+        }
+
+        .difficulty-btn {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .difficulty-btn:hover {
+            border-color: #4f46e5;
+            background: #f8faff;
+        }
+
+        .difficulty-btn.selected {
+            border-color: #4f46e5;
+            background: #eff6ff;
+        }
+
+        .difficulty-name {
+            font-weight: 600;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+
+        .difficulty-desc {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .instructions {
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        .instruction-item {
+            color: #4b5563;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .note-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #1e40af;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .copyright {
+            margin-top: 1.5rem;
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+
+        .privacy-modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -85,91 +169,102 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000;
         }
-        .modal-content {
+
+        .privacy-content {
             background: white;
+            border-radius: 16px;
             padding: 2rem;
-            border-radius: 12px;
             max-width: 500px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
-        .branding {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #4f46e5;
-            margin-bottom: 0.5rem;
-        }
-        .tagline {
-            color: #6b7280;
-            font-size: 0.9rem;
-        }
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
+
+        .privacy-text {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f9fafb;
+            padding: 1rem;
             border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+        .registration-form {
+            margin-top: 1rem;
         }
-        .btn:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-            transform: none;
-        }
+
         .form-group {
             margin-bottom: 1rem;
+            text-align: left;
         }
-        .form-group label {
+
+        .form-label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
             color: #374151;
         }
-        .form-group input, .form-group select {
+
+        .form-input {
             width: 100%;
             padding: 0.75rem;
             border: 2px solid #e5e7eb;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
         }
-        .form-group input:focus, .form-group select:focus {
+
+        .form-input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #4f46e5;
         }
+
         .checkbox-group {
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        .checkbox-group input[type="checkbox"] {
-            width: auto;
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
-        .privacy-policy {
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #e5e7eb;
-            padding: 1rem;
-            border-radius: 6px;
-            background: #f9fafb;
-            font-size: 0.9rem;
-            line-height: 1.5;
+
+        .btn {
+            flex: 1;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Game elements */
         .game-ui {
             position: absolute;
             top: 20px;
@@ -179,9 +274,66 @@
             justify-content: space-between;
             align-items: center;
             color: white;
-            font-weight: bold;
+            font-weight: 600;
             z-index: 100;
         }
+
+        .game-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .game-object {
+            position: absolute;
+            transition: all 0.1s ease;
+            cursor: pointer;
+        }
+
+        .tooth {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .bacteria {
+            width: 30px;
+            height: 30px;
+            background: #dc2626;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            z-index: 5;
+        }
+
+        .powerup {
+            width: 35px;
+            height: 35px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            z-index: 7;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
         .pause-btn {
             background: rgba(255, 255, 255, 0.2);
             border: 2px solid rgba(255, 255, 255, 0.3);
@@ -191,66 +343,56 @@
             cursor: pointer;
             backdrop-filter: blur(10px);
         }
-        .welcome-banner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 200;
-        }
-        .difficulty-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-        .difficulty-card {
-            padding: 1rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-        .difficulty-card:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-        }
-        .difficulty-card.selected {
-            border-color: #667eea;
-            background: #f0f4ff;
-        }
+
         .game-over-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .game-over-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
             text-align: center;
+            max-width: 400px;
+            width: 90%;
         }
-        .game-over-modal h2 {
-            color: #ef4444;
-            margin-bottom: 1rem;
-        }
-        .stats {
-            background: #f3f4f6;
-            padding: 1rem;
-            border-radius: 8px;
+
+        .final-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #4f46e5;
             margin: 1rem 0;
         }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #f3f4f6;
+            border-radius: 8px;
         }
+
         .stat-item {
             text-align: center;
         }
+
         .stat-value {
             font-size: 1.5rem;
             font-weight: bold;
             color: #4f46e5;
         }
+
         .stat-label {
             font-size: 0.9rem;
             color: #6b7280;
@@ -261,98 +403,72 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef, useCallback } = React;
+        const { useState, useEffect, useRef } = React;
 
         // Game configuration
-        const GAME_CONFIG = {
-            BEGINNER: {
-                name: 'Beginner',
-                description: 'Perfect for new players',
-                bacteriaSpeed: 1,
-                spawnRate: 2000,
-                powerUpChance: 0.3,
-                startingLives: 5
+        const DIFFICULTY_CONFIG = {
+            EASY: {
+                name: 'Easy (Ages 3-6)',
+                desc: 'Faster pace, auto-shooting help',
+                speed: 1,
+                spawnRate: 2500,
+                powerUpChance: 0.4,
+                lives: 5
             },
             INTERMEDIATE: {
-                name: 'Intermediate',
-                description: 'A good challenge',
-                bacteriaSpeed: 1.5,
-                spawnRate: 1500,
-                powerUpChance: 0.2,
-                startingLives: 4
+                name: 'Intermediate (Ages 7-9)',
+                desc: 'Challenging speed, more tough enemies',
+                speed: 1.8,
+                spawnRate: 1800,
+                powerUpChance: 0.25,
+                lives: 4
             },
             ADVANCED: {
-                name: 'Advanced',
-                description: 'For skilled players',
-                bacteriaSpeed: 2,
-                spawnRate: 1000,
+                name: 'Advanced (Ages 10+)',
+                desc: 'Fast action, frequent boss enemies',
+                speed: 2.5,
+                spawnRate: 1200,
                 powerUpChance: 0.15,
-                startingLives: 3
-            },
-            COMPETITIVE: {
-                name: 'Competitive',
-                description: 'Ultimate challenge',
-                bacteriaSpeed: 2.5,
-                spawnRate: 800,
-                powerUpChance: 0.1,
-                startingLives: 2
+                lives: 3
             }
         };
 
         // Privacy Policy Modal
-        const PrivacyPolicyModal = ({ isOpen, onClose, onAccept }) => {
+        const PrivacyModal = ({ isOpen, onAccept, onDecline }) => {
             if (!isOpen) return null;
 
             return (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <div className="branding">
-                            <div className="logo">🦷 Dental Defenders</div>
-                            <div className="tagline">Powered by Dr. Gabe Dawson</div>
-                        </div>
-                        <h2>Privacy Policy</h2>
-                        <div className="privacy-policy">
-                            <p><strong>Effective Date:</strong> July 2025</p>
+                <div className="privacy-modal">
+                    <div className="privacy-content">
+                        <h2 style={{ marginBottom: '1rem', color: '#374151' }}>Privacy Policy</h2>
+                        <div className="privacy-text">
                             <p><strong>Dr. Gabe Dawson's Dental Defenders Privacy Policy</strong></p>
-                            
-                            <h3>Information We Collect</h3>
-                            <p>We collect minimal information to enhance your gaming experience:</p>
+                            <br />
+                            <p><strong>Information We Collect:</strong></p>
                             <ul>
-                                <li>Player name (for display purposes only)</li>
+                                <li>Player name (display purposes only)</li>
                                 <li>Game scores and statistics</li>
-                                <li>Difficulty level preferences</li>
+                                <li>Difficulty preferences</li>
                             </ul>
-
-                            <h3>How We Use Your Information</h3>
-                            <p>Your information is used solely to:</p>
+                            <br />
+                            <p><strong>Data Usage:</strong></p>
                             <ul>
-                                <li>Personalize your gaming experience</li>
-                                <li>Track game progress and achievements</li>
-                                <li>Improve game features and performance</li>
+                                <li>Personalize gaming experience</li>
+                                <li>Track progress and achievements</li>
+                                <li>Improve game features</li>
                             </ul>
-
-                            <h3>Data Storage and Security</h3>
-                            <p>All game data is stored locally on your device. We do not transmit or store personal information on external servers.</p>
-
-                            <h3>Third-Party Services</h3>
-                            <p>This game does not use third-party analytics or advertising services.</p>
-
-                            <h3>Children's Privacy</h3>
-                            <p>This game is designed to be family-friendly and does not knowingly collect personal information from children under 13.</p>
-
-                            <h3>Contact Information</h3>
-                            <p>For questions about this privacy policy, please contact Dr. Gabe Dawson's office.</p>
-
-                            <h3>Changes to This Policy</h3>
-                            <p>We may update this privacy policy periodically. Continued use of the game constitutes acceptance of any changes.</p>
+                            <br />
+                            <p><strong>Data Storage:</strong> All data stored locally on your device only.</p>
+                            <br />
+                            <p><strong>Third Parties:</strong> No data shared with third parties.</p>
+                            <br />
+                            <p><strong>Children's Privacy:</strong> Family-friendly, no personal data collection from children under 13.</p>
                         </div>
-                        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-                            <button className="btn" onClick={onAccept}>Accept & Continue</button>
-                            <button 
-                                className="btn" 
-                                onClick={onClose}
-                                style={{ background: '#6b7280' }}
-                            >
+                        <div className="modal-buttons">
+                            <button className="btn btn-primary" onClick={onAccept}>
+                                Accept & Continue
+                            </button>
+                            <button className="btn btn-secondary" onClick={onDecline}>
                                 Decline
                             </button>
                         </div>
@@ -362,84 +478,61 @@
         };
 
         // Registration Modal
-        const RegistrationModal = ({ isOpen, onClose, onRegister }) => {
+        const RegistrationModal = ({ isOpen, onRegister, onCancel }) => {
             const [formData, setFormData] = useState({
                 name: '',
-                difficulty: 'BEGINNER',
                 acceptPrivacy: false
             });
+
+            if (!isOpen) return null;
 
             const handleSubmit = (e) => {
                 e.preventDefault();
                 if (formData.name.trim() && formData.acceptPrivacy) {
-                    onRegister(formData);
+                    onRegister(formData.name.trim());
                 }
             };
 
-            if (!isOpen) return null;
-
             return (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <div className="branding">
-                            <div className="logo">🦷 Dental Defenders</div>
-                            <div className="tagline">Powered by Dr. Gabe Dawson</div>
-                        </div>
-                        <h2>Player Registration</h2>
-                        <form onSubmit={handleSubmit}>
+                <div className="privacy-modal">
+                    <div className="privacy-content">
+                        <h2 style={{ marginBottom: '1rem', color: '#374151' }}>Player Registration</h2>
+                        <form onSubmit={handleSubmit} className="registration-form">
                             <div className="form-group">
-                                <label htmlFor="name">Player Name</label>
+                                <label className="form-label">Player Name</label>
                                 <input
-                                    id="name"
                                     type="text"
+                                    className="form-input"
                                     value={formData.name}
                                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                                     placeholder="Enter your name"
                                     required
                                 />
                             </div>
-
-                            <div className="form-group">
-                                <label htmlFor="difficulty">Difficulty Level</label>
-                                <select
-                                    id="difficulty"
-                                    value={formData.difficulty}
-                                    onChange={(e) => setFormData({...formData, difficulty: e.target.value})}
-                                >
-                                    {Object.entries(GAME_CONFIG).map(([key, config]) => (
-                                        <option key={key} value={key}>
-                                            {config.name} - {config.description}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
                             <div className="form-group">
                                 <div className="checkbox-group">
                                     <input
                                         type="checkbox"
-                                        id="privacy"
+                                        id="privacy-check"
                                         checked={formData.acceptPrivacy}
                                         onChange={(e) => setFormData({...formData, acceptPrivacy: e.target.checked})}
                                         required
                                     />
-                                    <label htmlFor="privacy">I accept the Privacy Policy</label>
+                                    <label htmlFor="privacy-check">I accept the Privacy Policy</label>
                                 </div>
                             </div>
-
-                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                            <div className="modal-buttons">
                                 <button 
                                     type="submit" 
-                                    className="btn"
+                                    className="btn btn-primary"
                                     disabled={!formData.name.trim() || !formData.acceptPrivacy}
                                 >
                                     Start Game
                                 </button>
                                 <button 
                                     type="button"
-                                    className="btn" 
-                                    onClick={onClose}
-                                    style={{ background: '#6b7280' }}
+                                    className="btn btn-secondary" 
+                                    onClick={onCancel}
                                 >
                                     Cancel
                                 </button>
@@ -451,370 +544,331 @@
         };
 
         // Game Over Modal
-        const GameOverModal = ({ isOpen, onClose, onRestart, score, stats }) => {
+        const GameOverModal = ({ isOpen, score, stats, onRestart, onMenu }) => {
             if (!isOpen) return null;
 
             return (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <div className="game-over-modal">
-                            <div className="branding">
-                                <div className="logo">🦷 Dental Defenders</div>
-                                <div className="tagline">Powered by Dr. Gabe Dawson</div>
+                <div className="game-over-modal">
+                    <div className="game-over-content">
+                        <h2 style={{ color: '#dc2626', marginBottom: '1rem' }}>Game Over!</h2>
+                        <div className="final-score">{score}</div>
+                        <p style={{ color: '#6b7280' }}>Final Score</p>
+                        
+                        <div className="stats-grid">
+                            <div className="stat-item">
+                                <div className="stat-value">{stats.enemiesDestroyed}</div>
+                                <div className="stat-label">Enemies Destroyed</div>
                             </div>
-                            <h2>Game Over!</h2>
-                            <div className="stats">
-                                <div className="stats-grid">
-                                    <div className="stat-item">
-                                        <div className="stat-value">{score}</div>
-                                        <div className="stat-label">Final Score</div>
-                                    </div>
-                                    <div className="stat-item">
-                                        <div className="stat-value">{stats.bacteriaDestroyed}</div>
-                                        <div className="stat-label">Bacteria Destroyed</div>
-                                    </div>
-                                    <div className="stat-item">
-                                        <div className="stat-value">{stats.powerUpsCollected}</div>
-                                        <div className="stat-label">Power-ups Collected</div>
-                                    </div>
-                                    <div className="stat-item">
-                                        <div className="stat-value">{Math.round(stats.accuracy * 100)}%</div>
-                                        <div className="stat-label">Accuracy</div>
-                                    </div>
-                                </div>
+                            <div className="stat-item">
+                                <div className="stat-value">{stats.powerupsCollected}</div>
+                                <div className="stat-label">Power-ups Collected</div>
                             </div>
-                            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-                                <button className="btn" onClick={onRestart}>
-                                    Play Again
-                                </button>
-                                <button 
-                                    className="btn" 
-                                    onClick={onClose}
-                                    style={{ background: '#6b7280' }}
-                                >
-                                    Main Menu
-                                </button>
+                            <div className="stat-item">
+                                <div className="stat-value">{Math.round(stats.accuracy * 100)}%</div>
+                                <div className="stat-label">Accuracy</div>
                             </div>
+                            <div className="stat-item">
+                                <div className="stat-value">{Math.floor(stats.timeAlive)}s</div>
+                                <div className="stat-label">Time Survived</div>
+                            </div>
+                        </div>
+
+                        <div className="modal-buttons">
+                            <button className="btn btn-primary" onClick={onRestart}>
+                                Play Again
+                            </button>
+                            <button className="btn btn-secondary" onClick={onMenu}>
+                                Main Menu
+                            </button>
                         </div>
                     </div>
                 </div>
             );
         };
 
-        // Welcome Banner
-        const WelcomeBanner = ({ player, onStart, onChangeDifficulty }) => {
-            const [selectedDifficulty, setSelectedDifficulty] = useState(player.difficulty);
-
-            const handleStart = () => {
-                onChangeDifficulty(selectedDifficulty);
-                onStart();
-            };
-
-            return (
-                <div className="welcome-banner">
-                    <div className="branding">
-                        <div className="logo">🦷 Dental Defenders</div>
-                        <div className="tagline">Powered by Dr. Gabe Dawson</div>
-                    </div>
-                    <h2>Welcome, {player.name}!</h2>
-                    <p>Ready to defend those teeth?</p>
-                    
-                    <div className="difficulty-selector">
-                        {Object.entries(GAME_CONFIG).map(([key, config]) => (
-                            <div 
-                                key={key}
-                                className={`difficulty-card ${selectedDifficulty === key ? 'selected' : ''}`}
-                                onClick={() => setSelectedDifficulty(key)}
-                            >
-                                <h3>{config.name}</h3>
-                                <p>{config.description}</p>
-                                <small>Lives: {config.startingLives}</small>
-                            </div>
-                        ))}
-                    </div>
-
-                    <button className="btn" onClick={handleStart}>
-                        Start Game
-                    </button>
-                </div>
-            );
-        };
-
         // Main Game Component
         const DentalDefenders = () => {
-            // Game state
-            const [gameState, setGameState] = useState('menu'); // 'menu', 'privacy', 'register', 'welcome', 'playing', 'paused', 'gameOver'
-            const [player, setPlayer] = useState(null);
+            const [gameState, setGameState] = useState('menu'); // 'menu', 'privacy', 'register', 'playing', 'paused', 'gameOver'
+            const [selectedDifficulty, setSelectedDifficulty] = useState('EASY');
+            const [playerName, setPlayerName] = useState('');
             const [score, setScore] = useState(0);
             const [lives, setLives] = useState(5);
             const [gameObjects, setGameObjects] = useState([]);
-            const [toothPosition, setToothPosition] = useState({ x: 50, y: 50 });
-            const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+            const [playerPos, setPlayerPos] = useState({ x: 50, y: 90 });
             const [gameStats, setGameStats] = useState({
-                bacteriaDestroyed: 0,
-                powerUpsCollected: 0,
-                shotsfired: 0,
-                accuracy: 0
+                enemiesDestroyed: 0,
+                powerupsCollected: 0,
+                shotsTotal: 0,
+                accuracy: 0,
+                timeAlive: 0
             });
 
             const gameLoopRef = useRef(null);
-            const gameContainerRef = useRef(null);
+            const gameStartTime = useRef(null);
 
             // Handle name duplicates
-            const handleNameDuplicate = (name) => {
-                const storedPlayers = JSON.parse(localStorage.getItem('dentalDefendersPlayers') || '[]');
-                const existingNames = storedPlayers.map(p => p.name);
+            const generateUniqueName = (name) => {
+                const stored = JSON.parse(localStorage.getItem('dentalPlayers') || '[]');
+                const existing = stored.map(p => p.name);
                 
-                if (!existingNames.includes(name)) {
-                    return name;
+                if (!existing.includes(name)) return name;
+                
+                // Try first initial + last name
+                const parts = name.split(' ');
+                if (parts.length > 1) {
+                    const shortName = parts[0][0] + ' ' + parts[parts.length - 1];
+                    if (!existing.includes(shortName)) return shortName;
                 }
-
-                // Try adding first initial + last name format
-                const nameParts = name.split(' ');
-                if (nameParts.length > 1) {
-                    const firstInitial = nameParts[0][0];
-                    const lastName = nameParts[nameParts.length - 1];
-                    const shortName = `${firstInitial} ${lastName}`;
-                    
-                    if (!existingNames.includes(shortName)) {
-                        return shortName;
-                    }
-                }
-
-                // Add number suffix
+                
+                // Add number
                 let counter = 2;
                 let uniqueName = `${name} ${counter.toString().padStart(4, '0')}`;
-                while (existingNames.includes(uniqueName)) {
+                while (existing.includes(uniqueName)) {
                     counter++;
                     uniqueName = `${name} ${counter.toString().padStart(4, '0')}`;
                 }
                 return uniqueName;
             };
 
-            // Initialize game
-            const initializeGame = () => {
+            // Start privacy flow
+            const handleStartGame = () => {
                 setGameState('privacy');
             };
 
-            // Handle privacy policy acceptance
+            // Handle privacy acceptance
             const handlePrivacyAccept = () => {
                 setGameState('register');
             };
 
             // Handle registration
-            const handleRegistration = (formData) => {
-                const uniqueName = handleNameDuplicate(formData.name);
-                const newPlayer = {
+            const handleRegistration = (name) => {
+                const uniqueName = generateUniqueName(name);
+                setPlayerName(uniqueName);
+                
+                // Store player
+                const stored = JSON.parse(localStorage.getItem('dentalPlayers') || '[]');
+                stored.push({
                     name: uniqueName,
-                    difficulty: formData.difficulty,
                     registrationDate: new Date().toISOString()
-                };
-
-                // Store player data
-                const storedPlayers = JSON.parse(localStorage.getItem('dentalDefendersPlayers') || '[]');
-                storedPlayers.push(newPlayer);
-                localStorage.setItem('dentalDefendersPlayers', JSON.stringify(storedPlayers));
-
-                setPlayer(newPlayer);
-                setLives(GAME_CONFIG[newPlayer.difficulty].startingLives);
-                setGameState('welcome');
+                });
+                localStorage.setItem('dentalPlayers', JSON.stringify(stored));
+                
+                setGameState('playing');
+                startGame();
             };
 
             // Start game
             const startGame = () => {
-                setGameState('playing');
+                const config = DIFFICULTY_CONFIG[selectedDifficulty];
                 setScore(0);
-                setLives(GAME_CONFIG[player.difficulty].startingLives);
+                setLives(config.lives);
                 setGameObjects([]);
                 setGameStats({
-                    bacteriaDestroyed: 0,
-                    powerUpsCollected: 0,
-                    shotsfired: 0,
-                    accuracy: 0
+                    enemiesDestroyed: 0,
+                    powerupsCollected: 0,
+                    shotsTotal: 0,
+                    accuracy: 0,
+                    timeAlive: 0
                 });
+                gameStartTime.current = Date.now();
                 startGameLoop();
-            };
-
-            // Change difficulty
-            const changeDifficulty = (newDifficulty) => {
-                setPlayer(prev => ({ ...prev, difficulty: newDifficulty }));
-                setLives(GAME_CONFIG[newDifficulty].startingLives);
             };
 
             // Game loop
             const startGameLoop = () => {
-                if (gameLoopRef.current) {
-                    clearInterval(gameLoopRef.current);
-                }
-
+                if (gameLoopRef.current) clearInterval(gameLoopRef.current);
+                
                 gameLoopRef.current = setInterval(() => {
-                    if (gameState === 'playing') {
-                        spawnBacteria();
-                        updateGameObjects();
+                    if (gameState !== 'playing') return;
+                    
+                    // Update time alive
+                    setGameStats(prev => ({
+                        ...prev,
+                        timeAlive: (Date.now() - gameStartTime.current) / 1000
+                    }));
+                    
+                    // Spawn enemies
+                    const config = DIFFICULTY_CONFIG[selectedDifficulty];
+                    if (Math.random() < 0.02) {
+                        const newObject = {
+                            id: Date.now() + Math.random(),
+                            type: Math.random() < config.powerUpChance ? 'powerup' : 'bacteria',
+                            x: Math.random() * 90,
+                            y: -5,
+                            speed: config.speed + Math.random() * 0.5
+                        };
+                        setGameObjects(prev => [...prev, newObject]);
                     }
+                    
+                    // Update positions
+                    setGameObjects(prev => {
+                        const updated = prev.map(obj => ({
+                            ...obj,
+                            y: obj.y + obj.speed
+                        }));
+                        
+                        // Remove off-screen objects and handle collisions
+                        return updated.filter(obj => {
+                            if (obj.y > 100) {
+                                if (obj.type === 'bacteria') {
+                                    setLives(lives => {
+                                        const newLives = lives - 1;
+                                        if (newLives <= 0) {
+                                            setGameState('gameOver');
+                                        }
+                                        return newLives;
+                                    });
+                                }
+                                return false;
+                            }
+                            return true;
+                        });
+                    });
                 }, 100);
             };
 
-            // Spawn bacteria
-            const spawnBacteria = () => {
-                const config = GAME_CONFIG[player.difficulty];
+            // Handle object click
+            const handleObjectClick = (obj) => {
+                if (gameState !== 'playing') return;
                 
-                if (Math.random() < (100 / config.spawnRate)) {
-                    const newBacteria = {
-                        id: Date.now() + Math.random(),
-                        type: Math.random() < config.powerUpChance ? 'powerUp' : 'bacteria',
-                        x: Math.random() * (window.innerWidth - 50),
-                        y: -50,
-                        speed: config.bacteriaSpeed
-                    };
-
-                    setGameObjects(prev => [...prev, newBacteria]);
+                setGameStats(prev => ({
+                    ...prev,
+                    shotsTotal: prev.shotsTotal + 1
+                }));
+                
+                if (obj.type === 'bacteria') {
+                    setScore(score => score + 10);
+                    setGameStats(prev => ({
+                        ...prev,
+                        enemiesDestroyed: prev.enemiesDestroyed + 1,
+                        accuracy: (prev.enemiesDestroyed + 1) / (prev.shotsTotal + 1)
+                    }));
+                } else if (obj.type === 'powerup') {
+                    setScore(score => score + 50);
+                    setLives(lives => Math.min(lives + 1, 10));
+                    setGameStats(prev => ({
+                        ...prev,
+                        powerupsCollected: prev.powerupsCollected + 1
+                    }));
                 }
-            };
-
-            // Update game objects
-            const updateGameObjects = () => {
-                setGameObjects(prev => {
-                    const updated = prev.map(obj => ({
-                        ...obj,
-                        y: obj.y + obj.speed
-                    })).filter(obj => {
-                        if (obj.y > window.innerHeight + 50) {
-                            if (obj.type === 'bacteria') {
-                                setLives(lives => {
-                                    const newLives = lives - 1;
-                                    if (newLives <= 0) {
-                                        setGameState('gameOver');
-                                    }
-                                    return newLives;
-                                });
-                            }
-                            return false;
-                        }
-                        return true;
-                    });
-
-                    return updated;
-                });
+                
+                setGameObjects(prev => prev.filter(o => o.id !== obj.id));
             };
 
             // Handle mouse movement
             const handleMouseMove = (e) => {
                 if (gameState === 'playing') {
-                    const rect = gameContainerRef.current.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    setMousePos({ x, y });
-                    setToothPosition({ x: x - 20, y: y - 20 });
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    setPlayerPos({ x: Math.max(0, Math.min(95, x)), y: 90 });
                 }
             };
 
-            // Handle clicking on objects
-            const handleObjectClick = (obj) => {
-                if (gameState !== 'playing') return;
-
-                setGameStats(prev => ({
-                    ...prev,
-                    shotsfired: prev.shotsfired + 1
-                }));
-
-                if (obj.type === 'bacteria') {
-                    setScore(score => score + 10);
-                    setGameStats(prev => ({
-                        ...prev,
-                        bacteriaDestroyed: prev.bacteriaDestroyed + 1,
-                        accuracy: (prev.bacteriaDestroyed + 1) / (prev.shotsfired + 1)
-                    }));
-                } else if (obj.type === 'powerUp') {
-                    setScore(score => score + 50);
-                    setLives(lives => Math.min(lives + 1, 10));
-                    setGameStats(prev => ({
-                        ...prev,
-                        powerUpsCollected: prev.powerUpsCollected + 1
-                    }));
-                }
-
-                setGameObjects(prev => prev.filter(o => o.id !== obj.id));
-            };
-
-            // Pause/Resume game
+            // Pause/Resume
             const togglePause = () => {
                 setGameState(gameState === 'playing' ? 'paused' : 'playing');
             };
 
-            // Restart game
-            const restartGame = () => {
-                setGameState('welcome');
+            // Restart
+            const handleRestart = () => {
+                setGameState('playing');
+                startGame();
             };
 
             // Return to menu
-            const returnToMenu = () => {
+            const handleReturnToMenu = () => {
                 setGameState('menu');
-                setPlayer(null);
-                if (gameLoopRef.current) {
-                    clearInterval(gameLoopRef.current);
-                }
+                if (gameLoopRef.current) clearInterval(gameLoopRef.current);
             };
 
             // Cleanup
             useEffect(() => {
                 return () => {
-                    if (gameLoopRef.current) {
-                        clearInterval(gameLoopRef.current);
-                    }
+                    if (gameLoopRef.current) clearInterval(gameLoopRef.current);
                 };
-            }, []);
-
-            // Auto-start
-            useEffect(() => {
-                initializeGame();
             }, []);
 
             return (
                 <div>
-                    {/* Privacy Policy Modal */}
-                    <PrivacyPolicyModal
+                    {/* Privacy Modal */}
+                    <PrivacyModal
                         isOpen={gameState === 'privacy'}
-                        onClose={returnToMenu}
                         onAccept={handlePrivacyAccept}
+                        onDecline={handleReturnToMenu}
                     />
 
                     {/* Registration Modal */}
                     <RegistrationModal
                         isOpen={gameState === 'register'}
-                        onClose={returnToMenu}
                         onRegister={handleRegistration}
+                        onCancel={handleReturnToMenu}
                     />
 
                     {/* Game Over Modal */}
                     <GameOverModal
                         isOpen={gameState === 'gameOver'}
-                        onClose={returnToMenu}
-                        onRestart={restartGame}
                         score={score}
                         stats={gameStats}
+                        onRestart={handleRestart}
+                        onMenu={handleReturnToMenu}
                     />
 
-                    {/* Game Container */}
-                    <div 
-                        ref={gameContainerRef}
-                        className="game-container"
-                        onMouseMove={handleMouseMove}
-                        style={{ cursor: gameState === 'playing' ? 'none' : 'default' }}
-                    >
-                        <div className="game-bg"></div>
+                    <div className="game-container" onMouseMove={handleMouseMove}>
+                        {/* Main Menu */}
+                        {gameState === 'menu' && (
+                            <div className="menu-overlay">
+                                <div className="menu-card">
+                                    <div className="shield-icon">🛡️</div>
+                                    <h1 className="game-title">Dental Defenders</h1>
+                                    <p className="game-subtitle">Protect your teeth from cavity creatures!</p>
+                                    
+                                    <div className="section-title">Choose Your Level:</div>
+                                    <div className="difficulty-options">
+                                        {Object.entries(DIFFICULTY_CONFIG).map(([key, config]) => (
+                                            <div
+                                                key={key}
+                                                className={`difficulty-btn ${selectedDifficulty === key ? 'selected' : ''}`}
+                                                onClick={() => setSelectedDifficulty(key)}
+                                            >
+                                                <div className="difficulty-name">{config.name}</div>
+                                                <div className="difficulty-desc">{config.desc}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="section-title">How to Play:</div>
+                                    <div className="instructions">
+                                        <div className="instruction-item">• Move hero with mouse/touch</div>
+                                        <div className="instruction-item">• Click to shoot projectiles</div>
+                                        <div className="instruction-item">• Protect the teeth at bottom</div>
+                                        <div className="instruction-item">• 35k+ points: Enemies dodge on Intermediate/Advanced!</div>
+                                        <div className="instruction-item">• 50k+ points: Enemies need 3 hits to destroy!</div>
+                                    </div>
+
+                                    <div className="note-box">
+                                        <strong>Note:</strong> Custom images will appear when deployed to tablets. Preview shows emojis due to security restrictions.
+                                    </div>
+
+                                    <button className="start-btn" onClick={handleStartGame}>
+                                        Start Defending!
+                                    </button>
+
+                                    <div className="copyright">©2025 Mike Radel / All Rights Reserved</div>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Game UI */}
                         {(gameState === 'playing' || gameState === 'paused') && (
                             <div className="game-ui">
-                                <div>
+                                <div className="game-stats">
                                     <div>Score: {score}</div>
                                     <div>Lives: {lives}</div>
-                                    <div>Player: {player?.name}</div>
+                                    <div>Player: {playerName}</div>
                                 </div>
-                                <div>
-                                    <div>Difficulty: {GAME_CONFIG[player?.difficulty]?.name}</div>
-                                    <div>Bacteria: {gameStats.bacteriaDestroyed}</div>
+                                <div className="game-stats">
+                                    <div>Difficulty: {DIFFICULTY_CONFIG[selectedDifficulty].name}</div>
+                                    <div>Enemies: {gameStats.enemiesDestroyed}</div>
                                 </div>
                                 <button className="pause-btn" onClick={togglePause}>
                                     {gameState === 'paused' ? 'Resume' : 'Pause'}
@@ -822,33 +876,22 @@
                             </div>
                         )}
 
-                        {/* Welcome Banner */}
-                        {gameState === 'welcome' && (
-                            <WelcomeBanner
-                                player={player}
-                                onStart={startGame}
-                                onChangeDifficulty={changeDifficulty}
-                            />
-                        )}
-
-                        {/* Pause Banner */}
+                        {/* Pause Overlay */}
                         {gameState === 'paused' && (
-                            <div className="welcome-banner">
-                                <div className="branding">
-                                    <div className="logo">🦷 Dental Defenders</div>
-                                    <div className="tagline">Powered by Dr. Gabe Dawson</div>
+                            <div className="menu-overlay">
+                                <div className="menu-card">
+                                    <h2 style={{ marginBottom: '2rem' }}>Game Paused</h2>
+                                    <button className="start-btn" onClick={togglePause}>
+                                        Resume Game
+                                    </button>
+                                    <button 
+                                        className="btn btn-secondary" 
+                                        onClick={handleReturnToMenu}
+                                        style={{ width: '100%', marginTop: '1rem' }}
+                                    >
+                                        Main Menu
+                                    </button>
                                 </div>
-                                <h2>Game Paused</h2>
-                                <button className="btn" onClick={togglePause}>
-                                    Resume Game
-                                </button>
-                                <button 
-                                    className="btn" 
-                                    onClick={returnToMenu}
-                                    style={{ background: '#6b7280', marginLeft: '1rem' }}
-                                >
-                                    Main Menu
-                                </button>
                             </div>
                         )}
 
@@ -856,25 +899,38 @@
                         {gameObjects.map(obj => (
                             <div
                                 key={obj.id}
-                                className={`game-object ${obj.type} ${obj.type === 'powerUp' ? 'pulse-animation' : ''}`}
-                                style={{ left: obj.x, top: obj.y }}
+                                className={`game-object ${obj.type}`}
+                                style={{ 
+                                    left: `${obj.x}%`, 
+                                    top: `${obj.y}%`,
+                                    transform: 'translate(-50%, -50%)'
+                                }}
                                 onClick={() => handleObjectClick(obj)}
-                            />
+                            >
+                                {obj.type === 'bacteria' ? '🦠' : '💊'}
+                            </div>
                         ))}
+
                         {/* Player Tooth */}
                         {(gameState === 'playing' || gameState === 'paused') && (
-<div
-className="game-object tooth floating-animation"
-style={{ left: toothPosition.x, top: toothPosition.y }}
-/>
-)}
-</div>
-</div>
-);
-};
-    // Render the app
-    ReactDOM.render(<DentalDefenders />, document.getElementById('root'));
-</script>
+                            <div
+                                className="game-object tooth"
+                                style={{ 
+                                    left: `${playerPos.x}%`, 
+                                    top: `${playerPos.y}%`,
+                                    transform: 'translate(-50%, -50%)'
+                                }}
+                            >
+                                🦷
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        // Render the app
+        ReactDOM.render(<DentalDefenders />, document.getElementById('root'));
+    </script>
 </body>
 </html>
-```
