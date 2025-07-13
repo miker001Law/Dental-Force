@@ -50,17 +50,24 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
-        .shield-icon {
-            font-size: 4rem;
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
             color: #4f46e5;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+            background-image: url('./src/DD Game Logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 120px;
+            width: 100%;
+            text-indent: -9999px; /* Hide text when image loads */
         }
 
-        .game-title {
-            font-size: 2.2rem;
-            font-weight: bold;
-            color: #1f2937;
-            margin-bottom: 0.5rem;
+        .tagline {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
         }
 
         .game-subtitle {
@@ -292,33 +299,45 @@
         .tooth {
             width: 40px;
             height: 40px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+            background-image: url('./src/Niko.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
             z-index: 10;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         .bacteria {
-            width: 30px;
-            height: 30px;
-            background: #dc2626;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1rem;
+            width: 35px;
+            height: 35px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
             z-index: 5;
+            cursor: pointer;
+        }
+
+        .bacteria.plaque {
+            background-image: url('./src/Plaque Bug Enemy.png');
+        }
+
+        .bacteria.sugar {
+            background-image: url('./src/Sugar Bug Enemy.png');
+        }
+
+        .bacteria.cavity {
+            background-image: url('./src/Cavity Bug Enemy.png');
+        }
+
+        .bacteria.food {
+            background-image: url('./src/Food Bug Enemy.png');
         }
 
         .powerup {
             width: 35px;
             height: 35px;
-            background: #10b981;
+            background: linear-gradient(135deg, #10b981, #34d399);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -327,6 +346,7 @@
             font-size: 1.2rem;
             z-index: 7;
             animation: pulse 2s infinite;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
         }
 
         @keyframes pulse {
@@ -397,6 +417,11 @@
             font-size: 0.9rem;
             color: #6b7280;
         }
+
+        .branding {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -448,6 +473,10 @@
             return (
                 <div className="privacy-modal">
                     <div className="privacy-content">
+                        <div className="branding">
+                            <div className="logo">Dental Defenders</div>
+                            <div className="tagline">Powered by Dr. Gabe Dawson</div>
+                        </div>
                         <h2 style={{ marginBottom: '1rem', color: '#374151' }}>Privacy Policy</h2>
                         <div className="privacy-text">
                             <p><strong>Dr. Gabe Dawson's Dental Defenders Privacy Policy</strong></p>
@@ -504,6 +533,10 @@
             return (
                 <div className="privacy-modal">
                     <div className="privacy-content">
+                        <div className="branding">
+                            <div className="logo">Dental Defenders</div>
+                            <div className="tagline">Powered by Dr. Gabe Dawson</div>
+                        </div>
                         <h2 style={{ marginBottom: '1rem', color: '#374151' }}>Player Registration</h2>
                         <form onSubmit={handleSubmit} className="registration-form">
                             <div className="form-group">
@@ -558,6 +591,10 @@
             return (
                 <div className="game-over-modal">
                     <div className="game-over-content">
+                        <div className="branding">
+                            <div className="logo">Dental Defenders</div>
+                            <div className="tagline">Powered by Dr. Gabe Dawson</div>
+                        </div>
                         <h2 style={{ color: '#dc2626', marginBottom: '1rem' }}>Game Over!</h2>
                         <div className="final-score">{score}</div>
                         <p style={{ color: '#6b7280' }}>Final Score</p>
@@ -698,9 +735,13 @@
                     // Spawn enemies
                     const config = DIFFICULTY_CONFIG[selectedDifficulty];
                     if (Math.random() < 0.02) {
+                        const bacteriaTypes = ['plaque', 'sugar', 'cavity', 'food'];
+                        const randomType = bacteriaTypes[Math.floor(Math.random() * bacteriaTypes.length)];
+                        
                         const newObject = {
                             id: Date.now() + Math.random(),
                             type: Math.random() < config.powerUpChance ? 'powerup' : 'bacteria',
+                            bacteriaType: randomType,
                             x: Math.random() * 90,
                             y: -5,
                             speed: config.speed + Math.random() * 0.5
@@ -826,8 +867,8 @@
                         {gameState === 'menu' && (
                             <div className="menu-overlay">
                                 <div className="menu-card">
-                                    <div className="shield-icon">🛡️</div>
-                                    <h1 className="game-title">Dental Defenders</h1>
+                                    <div className="logo">Dental Defenders</div>
+                                    <div className="tagline">Powered by Dr. Gabe Dawson</div>
                                     <p className="game-subtitle">Protect your teeth from cavity creatures!</p>
                                     
                                     <div className="section-title">Choose Your Level:</div>
@@ -888,6 +929,10 @@
                         {gameState === 'paused' && (
                             <div className="menu-overlay">
                                 <div className="menu-card">
+                                    <div className="branding">
+                                        <div className="logo">Dental Defenders</div>
+                                        <div className="tagline">Powered by Dr. Gabe Dawson</div>
+                                    </div>
                                     <h2 style={{ marginBottom: '2rem' }}>Game Paused</h2>
                                     <button className="start-btn" onClick={togglePause}>
                                         Resume Game
@@ -907,7 +952,7 @@
                         {gameObjects.map(obj => (
                             <div
                                 key={obj.id}
-                                className={`game-object ${obj.type}`}
+                                className={`game-object ${obj.type} ${obj.type === 'bacteria' ? obj.bacteriaType : ''}`}
                                 style={{ 
                                     left: `${obj.x}%`, 
                                     top: `${obj.y}%`,
@@ -915,11 +960,11 @@
                                 }}
                                 onClick={() => handleObjectClick(obj)}
                             >
-                                {obj.type === 'bacteria' ? '🦠' : '💊'}
+                                {obj.type === 'powerup' ? '💊' : ''}
                             </div>
                         ))}
 
-                        {/* Player Tooth */}
+                        {/* Player Character */}
                         {(gameState === 'playing' || gameState === 'paused') && (
                             <div
                                 className="game-object tooth"
@@ -928,9 +973,7 @@
                                     top: `${playerPos.y}%`,
                                     transform: 'translate(-50%, -50%)'
                                 }}
-                            >
-                                🦷
-                            </div>
+                            />
                         )}
                     </div>
                 </div>
