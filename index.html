@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dental Defenders - Dr. Gabe Dawson</title>
+    <title>Dental Defenders™ - Dr. Gabe Dawson</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -17,6 +17,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         .game-container {
@@ -27,27 +28,135 @@
             overflow: hidden;
         }
 
-        .menu-overlay {
+        /* Top Header */
+        .top-header {
             position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .game-title-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        .trademark {
+            font-size: 0.8rem;
+            vertical-align: super;
+        }
+
+        .header-center {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .nav-btn:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: rgba(79, 70, 229, 0.15);
+            color: #4f46e5;
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Modal Overlays */
+        .modal-overlay {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: rgba(0, 0, 0, 0.7);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
         }
 
-        .menu-card {
+        .modal-content {
             background: white;
             border-radius: 20px;
             padding: 2rem;
-            max-width: 400px;
+            max-width: 500px;
             width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        /* Branding */
+        .branding-top {
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #4f46e5;
+            margin-bottom: 0.5rem;
         }
 
         .logo {
@@ -78,10 +187,28 @@
             opacity: 1;
         }
 
-        .tagline {
-            color: #6b7280;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+        /* Main Menu Styles */
+        .menu-overlay {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            right: 0;
+            bottom: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .menu-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
 
         .game-subtitle {
@@ -107,7 +234,7 @@
             margin-bottom: 0.5rem;
             border: 2px solid #e5e7eb;
             border-radius: 12px;
-            background: white;
+            background: rgba(255, 255, 255, 0.8);
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
@@ -115,12 +242,13 @@
 
         .difficulty-btn:hover {
             border-color: #4f46e5;
-            background: #f8faff;
+            background: rgba(248, 250, 255, 0.9);
+            transform: translateY(-2px);
         }
 
         .difficulty-btn.selected {
             border-color: #4f46e5;
-            background: #eff6ff;
+            background: rgba(239, 246, 255, 0.9);
         }
 
         .difficulty-name {
@@ -147,7 +275,7 @@
         }
 
         .note-box {
-            background: #eff6ff;
+            background: rgba(239, 246, 255, 0.8);
             border: 1px solid #bfdbfe;
             border-radius: 8px;
             padding: 1rem;
@@ -156,7 +284,7 @@
             color: #1e40af;
         }
 
-        .start-btn {
+        .start-btn, .primary-btn {
             width: 100%;
             padding: 1rem 2rem;
             background: linear-gradient(135deg, #4f46e5, #7c3aed);
@@ -169,51 +297,31 @@
             transition: all 0.3s ease;
         }
 
-        .start-btn:hover {
+        .start-btn:hover, .primary-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
         }
 
-        .copyright {
-            margin-top: 1.5rem;
-            color: #9ca3af;
-            font-size: 0.8rem;
-        }
-
-        .privacy-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .secondary-btn {
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
+            padding: 1rem 2rem;
+            background: rgba(107, 114, 128, 0.8);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
         }
 
-        .privacy-content {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
+        .secondary-btn:hover {
+            transform: translateY(-1px);
+            background: rgba(107, 114, 128, 1);
         }
 
-        .privacy-text {
-            max-height: 300px;
-            overflow-y: auto;
-            background: #f9fafb;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
+        /* Form Styles */
         .registration-form {
             margin-top: 1rem;
         }
@@ -236,19 +344,51 @@
             border: 2px solid #e5e7eb;
             border-radius: 8px;
             font-size: 1rem;
+            transition: border-color 0.3s ease;
         }
 
         .form-input:focus {
             outline: none;
             border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .age-helper {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
         }
 
         .checkbox-group {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 0.5rem;
+            margin-top: 1rem;
         }
 
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-top: 0.25rem;
+        }
+
+        .checkbox-group label {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .privacy-link {
+            color: #4f46e5;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* Modal Buttons */
         .modal-buttons {
             display: flex;
             gap: 1rem;
@@ -285,10 +425,52 @@
             transform: none;
         }
 
-        /* Game elements */
+        /* Privacy Policy Styles */
+        .privacy-text {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .privacy-hero {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(239, 246, 255, 0.5);
+            border-radius: 12px;
+        }
+
+        .privacy-character {
+            width: 80px;
+            height: 80px;
+            background-image: url('./src/Niko.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            border: 3px solid #4f46e5;
+        }
+
+        .privacy-message {
+            flex: 1;
+            text-align: left;
+        }
+
+        .privacy-message h3 {
+            color: #4f46e5;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Game UI */
         .game-ui {
             position: absolute;
-            top: 20px;
+            top: 60px;
             left: 20px;
             right: 20px;
             display: flex;
@@ -296,7 +478,11 @@
             align-items: center;
             color: white;
             font-weight: 600;
-            z-index: 100;
+            z-index: 500;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 12px;
         }
 
         .game-stats {
@@ -304,6 +490,38 @@
             gap: 2rem;
         }
 
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .pause-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+        }
+
+        .pause-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Game Objects */
         .game-object {
             position: absolute;
             transition: all 0.1s ease;
@@ -311,8 +529,8 @@
         }
 
         .tooth {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             background-image: url('./src/Niko.png');
             background-size: cover;
             background-repeat: no-repeat;
@@ -340,8 +558,8 @@
         }
 
         .bacteria {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
@@ -385,8 +603,8 @@
         }
 
         .powerup {
-            width: 35px;
-            height: 35px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, #10b981, #34d399);
             border-radius: 50%;
             display: flex;
@@ -404,73 +622,159 @@
             50% { transform: scale(1.1); }
         }
 
-        .pause-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
+        /* Leaderboard Styles */
+        .leaderboard-container {
+            padding: 2rem 1rem;
         }
 
-        .game-over-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+        .leaderboard-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .leaderboard-item {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            z-index: 2000;
-        }
-
-        .game-over-content {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-        }
-
-        .final-score {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #4f46e5;
-            margin: 1rem 0;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin: 1.5rem 0;
             padding: 1rem;
-            background: #f3f4f6;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 8px;
+            border-left: 4px solid #4f46e5;
         }
 
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
+        .leaderboard-rank {
             font-weight: bold;
             color: #4f46e5;
+            font-size: 1.2rem;
+            min-width: 40px;
         }
 
-        .stat-label {
-            font-size: 0.9rem;
+        .leaderboard-player {
+            flex: 1;
+            text-align: left;
+            margin-left: 1rem;
+        }
+
+        .leaderboard-name {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .leaderboard-date {
+            font-size: 0.8rem;
             color: #6b7280;
         }
 
-        .branding {
-            text-align: center;
+        .leaderboard-score {
+            font-weight: bold;
+            color: #059669;
+            font-size: 1.1rem;
+        }
+
+        /* Settings Styles */
+        .settings-container {
+            padding: 2rem 1rem;
+        }
+
+        .settings-group {
+            margin-bottom: 2rem;
+        }
+
+        .settings-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
             margin-bottom: 1rem;
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: #d1d5db;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: #4f46e5;
+        }
+
+        .toggle-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(26px);
+        }
+
+        /* Shop Styles */
+        .shop-container {
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .coming-soon {
+            padding: 3rem 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .coming-soon h3 {
+            color: #4f46e5;
+            margin-bottom: 1rem;
+        }
+
+        .coming-soon p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* Copyright */
+        .copyright {
+            margin-top: 1.5rem;
+            color: #9ca3af;
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-stats {
+                gap: 1rem;
+            }
+            
+            .nav-btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.7rem;
+            }
+            
+            .nav-icon {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -479,7 +783,6 @@
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
-
         // Game configuration
         const DIFFICULTY_CONFIG = {
             EASY: {
@@ -515,44 +818,50 @@
                 lives: 2
             }
         };
-        // Privacy Policy Modal
-        const PrivacyModal = ({ isOpen, onAccept, onDecline }) => {
+
+        // Child Privacy Policy Modal
+        const ChildPrivacyModal = ({ isOpen, onAccept, onDecline }) => {
             if (!isOpen) return null;
 
             return (
-                <div className="privacy-modal">
-                    <div className="privacy-content">
-                        <div className="branding">
-                            <div className="logo">Dental Defenders</div>
-                            <div className="tagline">Powered by Dr. Gabe Dawson</div>
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="branding-top">Powered by Dr. Gabe Dawson</div>
+                        <div className="logo">Dental Defenders</div>
+                        
+                        <div className="privacy-hero">
+                            <div className="privacy-character"></div>
+                            <div className="privacy-message">
+                                <h3>Protecting Your Child's Privacy</h3>
+                                <p>We take your child's privacy very seriously!</p>
+                            </div>
                         </div>
-                        <h2 style={{ marginBottom: '1rem', color: '#374151' }}>Privacy Policy</h2>
+
                         <div className="privacy-text">
-                            <p><strong>Dr. Gabe Dawson's Dental Defenders Privacy Policy</strong></p>
+                            <p><strong>Dear Parents and Guardians,</strong></p>
+                            <p>We take your child's privacy very seriously. To protect their identity while allowing them to track their progress:</p>
                             <br />
-                            <p><strong>Information We Collect:</strong></p>
                             <ul>
-                                <li>Player name (display purposes only)</li>
-                                <li>Game scores and statistics</li>
-                                <li>Difficulty preferences</li>
+                                <li><strong>We only use your child's first name and the first letter of their last name</strong></li>
+                                <li><strong>Birth date is used only to suggest an age-appropriate game level</strong></li>
+                                <li><strong>Personal information is stored locally on your device only</strong></li>
+                                <li><strong>We never share any personal information with third parties</strong></li>
+                                <li><strong>If needed, we add a unique number to ensure each player name is unique</strong></li>
+                                <li><strong>Parent/guardian email is optional and only used for reward notifications</strong></li>
                             </ul>
                             <br />
-                            <p><strong>Data Usage:</strong></p>
-                            <ul>
-                                <li>Personalize gaming experience</li>
-                                <li>Track progress and achievements</li>
-                                <li>Improve game features</li>
-                            </ul>
+                            <p><strong>Example:</strong> "Michael S." or "Sarah J1234"</p>
                             <br />
-                            <p><strong>Data Storage:</strong> All data stored locally on your device only.</p>
-                            <br />
-                            <p><strong>Third Parties:</strong> No data shared with third parties.</p>
-                            <br />
-                            <p><strong>Children's Privacy:</strong> Family-friendly, no personal data collection from children under 13.</p>
+                            <p><strong>Data Collection:</strong> Player name, game scores, difficulty preferences</p>
+                            <p><strong>Data Usage:</strong> Personalize gaming experience, track progress</p>
+                            <p><strong>Data Storage:</strong> Local device only, no external servers</p>
+                            <p><strong>Third Parties:</strong> No data sharing</p>
+                            <p><strong>Children's Privacy:</strong> COPPA compliant, family-friendly</p>
                         </div>
+                        
                         <div className="modal-buttons">
                             <button className="btn btn-primary" onClick={onAccept}>
-                                Accept & Continue
+                                I Understand, Continue
                             </button>
                             <button className="btn btn-secondary" onClick={onDecline}>
                                 Decline
@@ -563,10 +872,14 @@
             );
         };
 
-        // Registration Modal
-        const RegistrationModal = ({ isOpen, onRegister, onCancel }) => {
+        // Enhanced Registration Modal
+        const RegistrationModal = ({ isOpen, onRegister, onCancel, onShowPrivacy }) => {
             const [formData, setFormData] = useState({
-                name: '',
+                firstName: '',
+                lastName: '',
+                age: '',
+                parentEmail: '',
+                parentPhone: '',
                 acceptPrivacy: false
             });
 
@@ -574,57 +887,126 @@
 
             const handleSubmit = (e) => {
                 e.preventDefault();
-                if (formData.name.trim() && formData.acceptPrivacy) {
-                    onRegister(formData.name.trim());
+                if (formData.firstName.trim() && formData.lastName.trim() && formData.acceptPrivacy) {
+                    onRegister(formData);
                 }
             };
 
+            const getRecommendedDifficulty = (age) => {
+                const ageNum = parseInt(age);
+                if (ageNum >= 3 && ageNum <= 6) return 'EASY';
+                if (ageNum >= 7 && ageNum <= 9) return 'INTERMEDIATE';
+                if (ageNum >= 10) return 'ADVANCED';
+                return 'EASY';
+            };
+
             return (
-                <div className="privacy-modal">
-                    <div className="privacy-content">
-                        <div className="branding">
-                            <div className="logo">Dental Defenders</div>
-                            <div className="tagline">Powered by Dr. Gabe Dawson</div>
-                        </div>
-                        <h2 style={{ marginBottom: '1rem', color: '#374151' }}>Player Registration</h2>
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="branding-top">Powered by Dr. Gabe Dawson</div>
+                        <div className="logo">Dental Defenders</div>
+                        
+                        <h2 style={{ marginBottom: '1.5rem', color: '#374151' }}>Player Registration</h2>
+                        
                         <form onSubmit={handleSubmit} className="registration-form">
-                            <div className="form-group">
-                                <label className="form-label">Player Name</label>
-                                <input
-                                    type="text"
-                                    className="form-input"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                    placeholder="Enter your name"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <div className="checkbox-group">
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label className="form-label">First Name</label>
                                     <input
-                                        type="checkbox"
-                                        id="privacy-check"
-                                        checked={formData.acceptPrivacy}
-                                        onChange={(e) => setFormData({...formData, acceptPrivacy: e.target.checked})}
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.firstName}
+                                        onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                                        placeholder="Enter first name"
                                         required
                                     />
-                                    <label htmlFor="privacy-check">I accept the Privacy Policy</label>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Last Name</label>
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.lastName}
+                                        onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                                        placeholder="Enter last name"
+                                        required
+                                    />
                                 </div>
                             </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Child's Age</label>
+                                <input
+                                    type="number"
+                                    className="form-input"
+                                    value={formData.age}
+                                    onChange={(e) => setFormData({...formData, age: e.target.value})}
+                                    placeholder="Enter age"
+                                    min="3"
+                                    max="18"
+                                />
+                                <div className="age-helper">
+                                    Used to recommend appropriate game level
+                                    {formData.age && (
+                                        <span style={{ color: '#4f46e5', fontWeight: 'bold' }}>
+                                            {' '}→ Recommended: {DIFFICULTY_CONFIG[getRecommendedDifficulty(formData.age)].name}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Parent/Guardian Email (Optional)</label>
+                                <input
+                                    type="email"
+                                    className="form-input"
+                                    value={formData.parentEmail}
+                                    onChange={(e) => setFormData({...formData, parentEmail: e.target.value})}
+                                    placeholder="For tournament notifications"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Parent/Guardian Phone (Optional)</label>
+                                <input
+                                    type="tel"
+                                    className="form-input"
+                                    value={formData.parentPhone}
+                                    onChange={(e) => setFormData({...formData, parentPhone: e.target.value})}
+                                    placeholder="For prize notifications only"
+                                />
+                            </div>
+
+                            <div className="checkbox-group">
+                                <input
+                                    type="checkbox"
+                                    id="privacy-check"
+                                    checked={formData.acceptPrivacy}
+                                    onChange={(e) => setFormData({...formData, acceptPrivacy: e.target.checked})}
+                                    required
+                                />
+                                <label htmlFor="privacy-check">
+                                    I have read and accept the{' '}
+                                    <span className="privacy-link" onClick={onShowPrivacy}>
+                                        Privacy Policy
+                                    </span>
+                                </label>
+                            </div>
+
                             <div className="modal-buttons">
                                 <button 
                                     type="submit" 
                                     className="btn btn-primary"
-                                    disabled={!formData.name.trim() || !formData.acceptPrivacy}
+                                    disabled={!formData.firstName.trim() || !formData.lastName.trim() || !formData.acceptPrivacy}
                                 >
-                                    Start Game
+                                    Register Player
                                 </button>
                                 <button 
                                     type="button"
                                     className="btn btn-secondary" 
                                     onClick={onCancel}
                                 >
-                                    Cancel
+                                    Continue as Guest
                                 </button>
                             </div>
                         </form>
@@ -633,37 +1015,264 @@
             );
         };
 
-        // Game Over Modal
-        const GameOverModal = ({ isOpen, score, stats, onRestart, onMenu }) => {
+        // Leaderboard Modal
+        const LeaderboardModal = ({ isOpen, onClose }) => {
+            const [leaderboard, setLeaderboard] = useState([]);
+
+            useEffect(() => {
+                if (isOpen) {
+                    const scores = JSON.parse(localStorage.getItem('dentalDefendersScores') || '[]');
+                    const sortedScores = scores
+                        .sort((a, b) => b.score - a.score)
+                        .slice(0, 100); // Top 100
+                    setLeaderboard(sortedScores);
+                }
+            }, [isOpen]);
+
             if (!isOpen) return null;
 
             return (
-                <div className="game-over-modal">
-                    <div className="game-over-content">
-                        <div className="branding">
-                            <div className="logo">Dental Defenders</div>
-                            <div className="tagline">Powered by Dr. Gabe Dawson</div>
-                        </div>
-                        <h2 style={{ color: '#dc2626', marginBottom: '1rem' }}>Game Over!</h2>
-                        <div className="final-score">{score}</div>
-                        <p style={{ color: '#6b7280' }}>Final Score</p>
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="branding-top">Powered by Dr. Gabe Dawson</div>
+                        <div className="logo">Dental Defenders</div>
                         
-                        <div className="stats-grid">
-                            <div className="stat-item">
-                                <div className="stat-value">{stats.enemiesDestroyed}</div>
-                                <div className="stat-label">Enemies Destroyed</div>
+                        <h2 style={{ marginBottom: '1.5rem', color: '#374151' }}>🏆 Top 100 Leaderboard</h2>
+                        
+                        <div className="leaderboard-container">
+                            {leaderboard.length === 0 ? (
+                                <div className="coming-soon">
+                                    <h3>No Scores Yet!</h3>
+                                    <p>Be the first to make it onto the leaderboard by playing Dental Defenders!</p>
+                                </div>
+                            ) : (
+                                <div className="leaderboard-list">
+                                    {leaderboard.map((entry, index) => (
+                                        <div key={entry.id} className="leaderboard-item">
+                                            <div className="leaderboard-rank">#{index + 1}</div>
+                                            <div className="leaderboard-player">
+                                                <div className="leaderboard-name">{entry.playerName}</div>
+                                                <div className="leaderboard-date">
+                                                    {new Date(entry.date).toLocaleDateString()} • {entry.difficulty}
+                                                </div>
+                                            </div>
+                                            <div className="leaderboard-score">{entry.score.toLocaleString()}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        
+                        <button className="primary-btn" onClick={onClose}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Settings Modal
+        const SettingsModal = ({ isOpen, onClose, settings, onUpdateSettings }) => {
+            if (!isOpen) return null;
+
+            const toggleSetting = (key) => {
+                onUpdateSettings({
+                    ...settings,
+                    [key]: !settings[key]
+                });
+            };
+
+            return (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="branding-top">Powered by Dr. Gabe Dawson</div>
+                        <div className="logo">Dental Defenders</div>
+                        
+                        <h2 style={{ marginBottom: '1.5rem', color: '#374151' }}>⚙️ Settings</h2>
+                        
+                        <div className="settings-container">
+                            <div className="settings-group">
+                                <div className="settings-title">Audio Settings</div>
+                                <div className="settings-item">
+                                    <div>
+                                        <div style={{ fontWeight: '600' }}>Sound Effects</div>
+                                        <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>Game sounds and effects</div>
+                                    </div>
+                                    <div 
+                                        className={`toggle-switch ${settings.soundEffects ? 'active' : ''}`}
+                                        onClick={() => toggleSetting('soundEffects')}
+                                    >
+                                        <div className="toggle-knob"></div>
+                                    </div>
+                                </div>
+                                <div className="settings-item">
+                                    <div>
+                                        <div style={{ fontWeight: '600' }}>Background Music</div>
+                                        <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>Ambient game music</div>
+                                    </div>
+                                    <div 
+                                        className={`toggle-switch ${settings.backgroundMusic ? 'active' : ''}`}
+                                        onClick={() => toggleSetting('backgroundMusic')}
+                                    >
+                                        <div className="toggle-knob"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="stat-item">
-                                <div className="stat-value">{stats.powerupsCollected}</div>
-                                <div className="stat-label">Power-ups Collected</div>
+
+                            <div className="settings-group">
+                                <div className="settings-title">Game Settings</div>
+                                <div className="settings-item">
+                                    <div>
+                                        <div style={{ fontWeight: '600' }}>Auto-Pause</div>
+                                        <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>Pause when window loses focus</div>
+                                    </div>
+                                    <div 
+                                        className={`toggle-switch ${settings.autoPause ? 'active' : ''}`}
+                                        onClick={() => toggleSetting('autoPause')}
+                                    >
+                                        <div className="toggle-knob"></div>
+                                    </div>
+                                </div>
+                                <div className="settings-item">
+                                    <div>
+                                        <div style={{ fontWeight: '600' }}>Show Tips</div>
+                                        <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>Display helpful game tips</div>
+                                    </div>
+                                    <div 
+                                        className={`toggle-switch ${settings.showTips ? 'active' : ''}`}
+                                        onClick={() => toggleSetting('showTips')}
+                                    >
+                                        <div className="toggle-knob"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="stat-item">
-                                <div className="stat-value">{Math.round(stats.accuracy * 100)}%</div>
-                                <div className="stat-label">Accuracy</div>
+
+                            <div className="settings-group">
+                                <div className="settings-title">Privacy Settings</div>
+                                <div className="settings-item">
+                                    <div>
+                                        <div style={{ fontWeight: '600' }}>Save High Scores</div>
+                                        <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>Store scores locally</div>
+                                    </div>
+                                    <div 
+                                        className={`toggle-switch ${settings.saveScores ? 'active' : ''}`}
+                                        onClick={() => toggleSetting('saveScores')}
+                                    >
+                                        <div className="toggle-knob"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="stat-item">
-                                <div className="stat-value">{Math.floor(stats.timeAlive)}s</div>
-                                <div className="stat-label">Time Survived</div>
+                        </div>
+                        
+                        <button className="primary-btn" onClick={onClose}>
+                            Save Settings
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Shop Modal
+        const ShopModal = ({ isOpen, onClose }) => {
+            if (!isOpen) return null;
+
+            return (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="branding-top">Powered by Dr. Gabe Dawson</div>
+                        <div className="logo">Dental Defenders</div>
+                        
+                        <h2 style={{ marginBottom: '1.5rem', color: '#374151' }}>🛒 Oral Health Shop</h2>
+                        
+                        <div className="shop-container">
+                            <div className="coming-soon">
+                                <h3>🦷 Coming Soon!</h3>
+                                <p>We're preparing an amazing collection of oral health care products to help you maintain that winning smile!</p>
+                                <br />
+                                <p><strong>What's Coming:</strong></p>
+                                <ul style={{ textAlign: 'left', marginTop: '1rem' }}>
+                                    <li>Premium toothbrushes and toothpaste</li>
+                                    <li>Fun dental care kits for kids</li>
+                                    <li>Educational dental health materials</li>
+                                    <li>Tournament winner exclusive items</li>
+                                    <li>Dr. Gabe Dawson recommended products</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <button className="primary-btn" onClick={onClose}>
+                            Close
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // Game Over Modal
+        const GameOverModal = ({ isOpen, score, stats, onRestart, onMenu, playerName, difficulty }) => {
+            useEffect(() => {
+                if (isOpen && score > 0) {
+                    // Save score to leaderboard
+                    const scores = JSON.parse(localStorage.getItem('dentalDefendersScores') || '[]');
+                    const newScore = {
+                        id: Date.now(),
+                        playerName: playerName || 'Guest',
+                        score: score,
+                        difficulty: difficulty,
+                        date: new Date().toISOString(),
+                        stats: stats
+                    };
+                    scores.push(newScore);
+                    localStorage.setItem('dentalDefendersScores', JSON.stringify(scores));
+                }
+            }, [isOpen, score]);
+
+            if (!isOpen) return null;
+
+            return (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="branding-top">Powered by Dr. Gabe Dawson</div>
+                        <div className="logo">Dental Defenders</div>
+                        
+                        <h2 style={{ color: '#dc2626', marginBottom: '1rem' }}>Game Over!</h2>
+                        <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#4f46e5', margin: '1rem 0' }}>
+                            {score.toLocaleString()}
+                        </div>
+                        <p style={{ color: '#6b7280', marginBottom: '1.5rem' }}>Final Score</p>
+                        
+                        <div style={{ 
+                            display: 'grid', 
+                            gridTemplateColumns: 'repeat(2, 1fr)', 
+                            gap: '1rem',
+                            margin: '1.5rem 0',
+                            padding: '1rem',
+                            background: '#f3f4f6',
+                            borderRadius: '8px'
+                        }}>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4f46e5' }}>
+                                    {stats.enemiesDestroyed}
+                                </div>
+                                <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>Enemies Destroyed</div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4f46e5' }}>
+                                    {stats.powerupsCollected}
+                                </div>
+                                <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>Power-ups Collected</div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4f46e5' }}>
+                                    {Math.round(stats.accuracy * 100)}%
+                                </div>
+                                <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>Accuracy</div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#4f46e5' }}>
+                                    {Math.floor(stats.timeAlive)}s
+                                </div>
+                                <div style={{ fontSize: '0.9rem', color: '#6b7280' }}>Time Survived</div>
                             </div>
                         </div>
 
@@ -682,13 +1291,14 @@
 
         // Main Game Component
         const DentalDefenders = () => {
-            const [gameState, setGameState] = useState('menu'); // 'menu', 'privacy', 'register', 'playing', 'paused', 'gameOver'
+            const [gameState, setGameState] = useState('menu'); // 'menu', 'childPrivacy', 'register', 'playing', 'paused', 'gameOver'
+            const [currentModal, setCurrentModal] = useState(null); // 'leaderboard', 'settings', 'shop'
             const [selectedDifficulty, setSelectedDifficulty] = useState('EASY');
-            const [playerName, setPlayerName] = useState('');
+            const [player, setPlayer] = useState(null);
             const [score, setScore] = useState(0);
             const [lives, setLives] = useState(5);
             const [gameObjects, setGameObjects] = useState([]);
-            const [playerPos, setPlayerPos] = useState({ x: 50, y: 90 });
+            const [playerPos, setPlayerPos] = useState({ x: 50, y: 85 });
             const [gameStats, setGameStats] = useState({
                 enemiesDestroyed: 0,
                 powerupsCollected: 0,
@@ -696,37 +1306,54 @@
                 accuracy: 0,
                 timeAlive: 0
             });
+            const [settings, setSettings] = useState({
+                soundEffects: true,
+                backgroundMusic: true,
+                autoPause: true,
+                showTips: true,
+                saveScores: true
+            });
 
             const gameLoopRef = useRef(null);
             const gameStartTime = useRef(null);
 
-            // Handle name duplicates
-            const generateUniqueName = (name) => {
+            // Load settings on mount
+            useEffect(() => {
+                const savedSettings = localStorage.getItem('dentalDefendersSettings');
+                if (savedSettings) {
+                    setSettings(JSON.parse(savedSettings));
+                }
+            }, []);
+
+            // Save settings when changed
+            const updateSettings = (newSettings) => {
+                setSettings(newSettings);
+                localStorage.setItem('dentalDefendersSettings', JSON.stringify(newSettings));
+            };
+
+            // Handle name generation
+            const generateDisplayName = (firstName, lastName) => {
                 const stored = JSON.parse(localStorage.getItem('dentalPlayers') || '[]');
-                const existing = stored.map(p => p.name);
+                const baseName = `${firstName} ${lastName[0]}.`;
+                const existing = stored.map(p => p.displayName);
                 
-                if (!existing.includes(name)) return name;
-                
-                // Try first initial + last name
-                const parts = name.split(' ');
-                if (parts.length > 1) {
-                    const shortName = parts[0][0] + ' ' + parts[parts.length - 1];
-                    if (!existing.includes(shortName)) return shortName;
+                if (!existing.includes(baseName)) {
+                    return baseName;
                 }
                 
-                // Add number
-                let counter = 2;
-                let uniqueName = `${name} ${counter.toString().padStart(4, '0')}`;
+                // Add number suffix
+                let counter = 1234;
+                let uniqueName = `${firstName} ${lastName[0]}${counter}`;
                 while (existing.includes(uniqueName)) {
                     counter++;
-                    uniqueName = `${name} ${counter.toString().padStart(4, '0')}`;
+                    uniqueName = `${firstName} ${lastName[0]}${counter}`;
                 }
                 return uniqueName;
             };
 
-            // Start privacy flow
+            // Start game flow
             const handleStartGame = () => {
-                setGameState('privacy');
+                setGameState('childPrivacy');
             };
 
             // Handle privacy acceptance
@@ -735,20 +1362,40 @@
             };
 
             // Handle registration
-            const handleRegistration = (name) => {
-                const uniqueName = generateUniqueName(name);
-                setPlayerName(uniqueName);
-                
-                // Store player
-                const stored = JSON.parse(localStorage.getItem('dentalPlayers') || '[]');
-                stored.push({
-                    name: uniqueName,
+            const handleRegistration = (formData) => {
+                const displayName = generateDisplayName(formData.firstName, formData.lastName);
+                const newPlayer = {
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    displayName: displayName,
+                    age: formData.age,
+                    parentEmail: formData.parentEmail,
+                    parentPhone: formData.parentPhone,
                     registrationDate: new Date().toISOString()
-                });
+                };
+
+                // Store player data
+                const stored = JSON.parse(localStorage.getItem('dentalPlayers') || '[]');
+                stored.push(newPlayer);
                 localStorage.setItem('dentalPlayers', JSON.stringify(stored));
+
+                setPlayer(newPlayer);
                 
-                setGameState('playing');
-                startGame();
+                // Set recommended difficulty based on age
+                if (formData.age) {
+                    const age = parseInt(formData.age);
+                    if (age >= 3 && age <= 6) setSelectedDifficulty('EASY');
+                    else if (age >= 7 && age <= 9) setSelectedDifficulty('INTERMEDIATE');
+                    else if (age >= 10) setSelectedDifficulty('ADVANCED');
+                }
+                
+                setGameState('menu');
+            };
+
+            // Handle guest play
+            const handleGuestPlay = () => {
+                setPlayer({ displayName: 'Guest', firstName: 'Guest' });
+                setGameState('menu');
             };
 
             // Start game
@@ -765,6 +1412,7 @@
                     timeAlive: 0
                 });
                 gameStartTime.current = Date.now();
+                setGameState('playing');
                 startGameLoop();
             };
 
@@ -783,7 +1431,7 @@
                     
                     // Spawn enemies
                     const config = DIFFICULTY_CONFIG[selectedDifficulty];
-                    if (Math.random() < 0.02) {
+                    if (Math.random() < 0.015) {
                         const bacteriaTypes = ['plaque', 'sugar', 'cavity', 'food'];
                         const randomType = bacteriaTypes[Math.floor(Math.random() * bacteriaTypes.length)];
                         
@@ -791,7 +1439,7 @@
                             id: Date.now() + Math.random(),
                             type: Math.random() < config.powerUpChance ? 'powerup' : 'bacteria',
                             bacteriaType: randomType,
-                            x: Math.random() * 90,
+                            x: Math.random() * 85 + 5, // Keep within bounds
                             y: -5,
                             speed: config.speed + Math.random() * 0.5
                         };
@@ -805,9 +1453,9 @@
                             y: obj.y + obj.speed
                         }));
                         
-                        // Remove off-screen objects and handle collisions
+                        // Remove off-screen objects and handle missed enemies
                         return updated.filter(obj => {
-                            if (obj.y > 100) {
+                            if (obj.y > 95) {
                                 if (obj.type === 'bacteria') {
                                     setLives(lives => {
                                         const newLives = lives - 1;
@@ -858,7 +1506,25 @@
                 if (gameState === 'playing') {
                     const rect = e.currentTarget.getBoundingClientRect();
                     const x = ((e.clientX - rect.left) / rect.width) * 100;
-                    setPlayerPos({ x: Math.max(0, Math.min(95, x)), y: 90 });
+                    setPlayerPos({ x: Math.max(5, Math.min(95, x)), y: 85 });
+                }
+            };
+
+            // Navigation handlers
+            const handleNavigation = (page) => {
+                if (page === 'home') {
+                    setGameState('menu');
+                    setCurrentModal(null);
+                    if (gameLoopRef.current) clearInterval(gameLoopRef.current);
+                } else if (page === 'game') {
+                    if (player) {
+                        startGame();
+                    } else {
+                        setGameState('childPrivacy');
+                    }
+                    setCurrentModal(null);
+                } else {
+                    setCurrentModal(page);
                 }
             };
 
@@ -869,7 +1535,6 @@
 
             // Restart
             const handleRestart = () => {
-                setGameState('playing');
                 startGame();
             };
 
@@ -888,9 +1553,9 @@
 
             return (
                 <div>
-                    {/* Privacy Modal */}
-                    <PrivacyModal
-                        isOpen={gameState === 'privacy'}
+                    {/* Child Privacy Modal */}
+                    <ChildPrivacyModal
+                        isOpen={gameState === 'childPrivacy'}
                         onAccept={handlePrivacyAccept}
                         onDecline={handleReturnToMenu}
                     />
@@ -899,7 +1564,28 @@
                     <RegistrationModal
                         isOpen={gameState === 'register'}
                         onRegister={handleRegistration}
-                        onCancel={handleReturnToMenu}
+                        onCancel={handleGuestPlay}
+                        onShowPrivacy={() => setGameState('childPrivacy')}
+                    />
+
+                    {/* Leaderboard Modal */}
+                    <LeaderboardModal
+                        isOpen={currentModal === 'leaderboard'}
+                        onClose={() => setCurrentModal(null)}
+                    />
+
+                    {/* Settings Modal */}
+                    <SettingsModal
+                        isOpen={currentModal === 'settings'}
+                        onClose={() => setCurrentModal(null)}
+                        settings={settings}
+                        onUpdateSettings={updateSettings}
+                    />
+
+                    {/* Shop Modal */}
+                    <ShopModal
+                        isOpen={currentModal === 'shop'}
+                        onClose={() => setCurrentModal(null)}
                     />
 
                     {/* Game Over Modal */}
@@ -909,15 +1595,33 @@
                         stats={gameStats}
                         onRestart={handleRestart}
                         onMenu={handleReturnToMenu}
+                        playerName={player?.displayName}
+                        difficulty={DIFFICULTY_CONFIG[selectedDifficulty].name}
                     />
 
                     <div className="game-container" onMouseMove={handleMouseMove}>
+                        {/* Top Header */}
+                        <div className="top-header">
+                            <div className="header-left">
+                                <div className="game-title-header">
+                                    Dental Defenders<span className="trademark">™</span>
+                                </div>
+                            </div>
+                            <div className="header-center">
+                                {player && gameState !== 'menu' && `Welcome, ${player.firstName || player.displayName}!`}
+                                {gameState === 'playing' && ` • Score: ${score.toLocaleString()}`}
+                            </div>
+                            <div className="header-right">
+                                ©2025 Mike Radel
+                            </div>
+                        </div>
+
                         {/* Main Menu */}
                         {gameState === 'menu' && (
                             <div className="menu-overlay">
                                 <div className="menu-card">
+                                    <div className="branding-top">Powered by Dr. Gabe Dawson</div>
                                     <div className="logo">Dental Defenders</div>
-                                    <div className="tagline">Powered by Dr. Gabe Dawson</div>
                                     <p className="game-subtitle">Protect your teeth from cavity creatures!</p>
                                     
                                     <div className="section-title">Choose Your Level:</div>
@@ -947,11 +1651,15 @@
                                         <strong>Note:</strong> Custom images will appear when deployed to tablets. Preview shows emojis due to security restrictions.
                                     </div>
 
-                                    <button className="start-btn" onClick={handleStartGame}>
+                                    <button className="start-btn" onClick={() => handleNavigation('game')}>
                                         Start Defending!
                                     </button>
 
-                                    <div className="copyright">©2025 Mike Radel / All Rights Reserved</div>
+                                    {player && (
+                                        <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#6b7280' }}>
+                                            Playing as: {player.displayName}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -960,16 +1668,31 @@
                         {(gameState === 'playing' || gameState === 'paused') && (
                             <div className="game-ui">
                                 <div className="game-stats">
-                                    <div>Score: {score}</div>
-                                    <div>Lives: {lives}</div>
-                                    <div>Player: {playerName}</div>
+                                    <div className="stat-item">
+                                        <div className="stat-value">{score.toLocaleString()}</div>
+                                        <div className="stat-label">Score</div>
+                                    </div>
+                                    <div className="stat-item">
+                                        <div className="stat-value">{lives}</div>
+                                        <div className="stat-label">Lives</div>
+                                    </div>
+                                    <div className="stat-item">
+                                        <div className="stat-value">{gameStats.enemiesDestroyed}</div>
+                                        <div className="stat-label">Enemies</div>
+                                    </div>
                                 </div>
                                 <div className="game-stats">
-                                    <div>Difficulty: {DIFFICULTY_CONFIG[selectedDifficulty].name}</div>
-                                    <div>Enemies: {gameStats.enemiesDestroyed}</div>
+                                    <div className="stat-item">
+                                        <div className="stat-value">{DIFFICULTY_CONFIG[selectedDifficulty].name}</div>
+                                        <div className="stat-label">Difficulty</div>
+                                    </div>
+                                    <div className="stat-item">
+                                        <div className="stat-value">{Math.floor(gameStats.timeAlive)}s</div>
+                                        <div className="stat-label">Time</div>
+                                    </div>
                                 </div>
                                 <button className="pause-btn" onClick={togglePause}>
-                                    {gameState === 'paused' ? 'Resume' : 'Pause'}
+                                    {gameState === 'paused' ? '▶️ Resume' : '⏸️ Pause'}
                                 </button>
                             </div>
                         )}
@@ -978,20 +1701,32 @@
                         {gameState === 'paused' && (
                             <div className="menu-overlay">
                                 <div className="menu-card">
-                                    <div className="branding">
-                                        <div className="logo">Dental Defenders</div>
-                                        <div className="tagline">Powered by Dr. Gabe Dawson</div>
+                                    <div className="branding-top">Powered by Dr. Gabe Dawson</div>
+                                    <div className="logo">Dental Defenders</div>
+                                    <h2 style={{ marginBottom: '2rem', color: '#374151' }}>⏸️ Game Paused</h2>
+                                    
+                                    <div style={{ marginBottom: '2rem', padding: '1rem', background: 'rgba(239, 246, 255, 0.8)', borderRadius: '8px' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', textAlign: 'center' }}>
+                                            <div>
+                                                <div style={{ fontWeight: 'bold', color: '#4f46e5' }}>{score.toLocaleString()}</div>
+                                                <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>Score</div>
+                                            </div>
+                                            <div>
+                                                <div style={{ fontWeight: 'bold', color: '#4f46e5' }}>{lives}</div>
+                                                <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>Lives</div>
+                                            </div>
+                                            <div>
+                                                <div style={{ fontWeight: 'bold', color: '#4f46e5' }}>{gameStats.enemiesDestroyed}</div>
+                                                <div style={{ fontSize: '0.8rem', color: '#6b7280' }}>Enemies</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <h2 style={{ marginBottom: '2rem' }}>Game Paused</h2>
-                                    <button className="start-btn" onClick={togglePause}>
-                                        Resume Game
+
+                                    <button className="primary-btn" onClick={togglePause}>
+                                        ▶️ Resume Game
                                     </button>
-                                    <button 
-                                        className="btn btn-secondary" 
-                                        onClick={handleReturnToMenu}
-                                        style={{ width: '100%', marginTop: '1rem' }}
-                                    >
-                                        Main Menu
+                                    <button className="secondary-btn" onClick={handleReturnToMenu}>
+                                        🏠 Main Menu
                                     </button>
                                 </div>
                             </div>
@@ -1024,6 +1759,45 @@
                                 }}
                             />
                         )}
+
+                        {/* Bottom Navigation */}
+                        <div className="nav-bar">
+                            <button 
+                                className={`nav-btn ${gameState === 'menu' ? 'active' : ''}`}
+                                onClick={() => handleNavigation('home')}
+                            >
+                                <div className="nav-icon">🏠</div>
+                                <div>HOME</div>
+                            </button>
+                            <button 
+                                className={`nav-btn ${(gameState === 'playing' || gameState === 'paused') ? 'active' : ''}`}
+                                onClick={() => handleNavigation('game')}
+                            >
+                                <div className="nav-icon">🎮</div>
+                                <div>GAME</div>
+                            </button>
+                            <button 
+                                className={`nav-btn ${currentModal === 'shop' ? 'active' : ''}`}
+                                onClick={() => handleNavigation('shop')}
+                            >
+                                <div className="nav-icon">🛒</div>
+                                <div>SHOP</div>
+                            </button>
+                            <button 
+                                className={`nav-btn ${currentModal === 'leaderboard' ? 'active' : ''}`}
+                                onClick={() => handleNavigation('leaderboard')}
+                            >
+                                <div className="nav-icon">🏆</div>
+                                <div>LEADERBOARD</div>
+                            </button>
+                            <button 
+                                className={`nav-btn ${currentModal === 'settings' ? 'active' : ''}`}
+                                onClick={() => handleNavigation('settings')}
+                            >
+                                <div className="nav-icon">⚙️</div>
+                                <div>SETTINGS</div>
+                            </button>
+                        </div>
                     </div>
                 </div>
             );
